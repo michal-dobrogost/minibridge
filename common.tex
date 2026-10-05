@@ -1,0 +1,146 @@
+% common.tex -- everything shared by a4.tex and letter.tex.
+% Defines the packages, fonts, suit symbols, the two card faces (\sideA = Rules,
+% \sideB = Scoring), the 4-up layout, and \minibridgecards which typesets both pages.
+%
+% It expects the including file to have already loaded \documentclass and geometry
+% (zero margins), because the paper size is the only thing that differs.
+%
+% Print double-sided (flip on LONG edge) at 100% / "Actual size", then cut along the
+% dashed centre lines. All four cells on a page are identical, so left/right mirroring
+% is not an issue.
+
+\usepackage[scaled]{helvet}
+\usepackage[T1]{fontenc}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{pifont}
+\usepackage{enumitem}
+\usepackage{url}\urlstyle{sf}
+\usepackage{tikz}
+\renewcommand{\familydefault}{\sfdefault}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\hyphenpenalty=10000 \exhyphenpenalty=10000 \tolerance=2000 \emergencystretch=2em
+
+% ---- CONFIGURE ----
+\newcommand{\footurl}{https://github.com/michal-dobrogost/minibridge}  % footnote on the scoring card
+\newlength{\inset}\setlength{\inset}{0.25in}   % white margin inside each cell
+\newcommand{\bodysize}{\fontsize{9}{10.8}\selectfont}
+\newcommand{\titlesize}{\fontsize{19}{21}\selectfont}
+\newcommand{\gap}{\vspace{0.7\baselineskip}}
+% -------------------
+
+% suit symbols
+\newcommand{\Club}{\ding{168}}
+\newcommand{\Diamondsuit}{{\color{red}\ding{169}}}
+\newcommand{\Heart}{{\color{red}\ding{170}}}
+\newcommand{\Spade}{\ding{171}}
+
+% 2x2 block of suits, then the title to its right
+\newcommand{\cardtitle}[1]{%
+  \noindent\hbox to \linewidth{%
+    \vbox{\fontsize{15}{16}\selectfont\offinterlineskip
+      \hbox to 2.1em{\hss\Heart\hss\Spade\hss}\vskip 0.15em
+      \hbox to 2.1em{\hss\Club\hss\Diamondsuit\hss}}%
+    \hspace{0.5em}%
+    \vbox{\hsize=\dimexpr\linewidth-3em\relax\titlesize\bfseries #1}\hss}%
+  \par\vspace{1.1\baselineskip}}
+
+\newlength{\cellw}\newlength{\cellh}
+\setlength{\cellw}{0.5\paperwidth}
+\setlength{\cellh}{0.5\paperheight}
+
+% ---------- SIDE B: SCORING ----------
+\newcommand{\sideB}{%
+  \cardtitle{MiniBridge Scoring}
+  \textbf{Contracts made}\gap
+
+  Points for contracts made are won by the declaring side. The declaring
+  side scores points only if they win the target number of tricks, or more.\gap
+
+  No points are won for the first 6 tricks. Every trick won thereafter,
+  including any beyond the contract's target, scores points according to the
+  contract as follows:\gap
+
+  \begin{tabular}{@{}l@{}l@{}}
+    \makebox[0.27\linewidth][l]{\Club\ or \Diamondsuit} & 20 points\\
+    \makebox[0.27\linewidth][l]{\Heart\ or \Spade} & 30 points\\
+    \makebox[0.27\linewidth][l]{No trumps} & 40 points for trick 7, 30 points thereafter
+  \end{tabular}\gap
+
+  Bonuses are awarded for the contract declared, not for extra tricks won:\gap
+
+  \begin{tabular}{@{}p{0.45\linewidth}@{}>{\raggedleft\arraybackslash}p{0.20\linewidth}@{}}
+    For a part-score contract: & 50 points\\
+    (at least 7 tricks) &
+  \end{tabular}\gap
+
+  \begin{tabular}{@{}p{0.45\linewidth}@{}>{\raggedleft\arraybackslash}p{0.20\linewidth}@{}}
+    For a game contract: & 300 points\\
+    \multicolumn{2}{@{}p{0.98\linewidth}@{}}{(at least 9 tricks in no trumps, 10 tricks in \Heart\ or \Spade,
+      11 tricks in \Club\ or \Diamondsuit)}
+  \end{tabular}\gap
+
+  \textbf{Unsuccessful contracts}\gap
+
+  If a contract is not made (i.e., the target number of tricks is not reached),
+  the defending side scores points instead of the declaring side. The
+  defenders score as follows, for each trick short of the target:\gap
+
+  \begin{tabular}{@{}p{0.45\linewidth}@{}>{\raggedleft\arraybackslash}p{0.20\linewidth}@{}}
+    Per undertrick: & 50 points
+  \end{tabular}
+  \vfill{\fontsize{5.5}{6.5}\selectfont\noindent\expandafter\url\expandafter{\footurl}}}
+
+% ---------- SIDE A: RULES ----------
+\newcommand{\sideA}{%
+  \cardtitle{MiniBridge Rules}
+  \begin{enumerate}[leftmargin=1.5em,itemsep=0.5\baselineskip,topsep=0pt,parsep=0pt]
+    \item The cards are shuffled and dealt, 13 each to the 4 players
+      (or taken from a pre-dealt board).
+    \item Points are counted and announced, starting with the dealer and
+      taking turns clockwise, using the scale:\\[0.3\baselineskip]
+      \hspace*{0.4em}Ace = 4\quad King = 3\quad Queen = 2\quad Jack = 1
+    \item The points for each partnership are totalled and the side with the
+      most points becomes the declaring side. The declarer is the member of the
+      declaring side with the most points, or the first to announce if equal.
+      Declarer's partner's hand is placed face up on the table as dummy.
+    \item Declarer decides and announces the contract -- the target number of
+      tricks and choice of trump suit or no trumps. Target numbers of tricks
+      may be:\\[0.3\baselineskip]
+      \hspace*{0.4em}\begin{tabular}[t]{@{}l@{\hspace{1.2em}}l@{}}
+        Part score: 7+ & Game in no trumps: 9+\\
+        Game in \Heart\ or \Spade: 10+ & Game in \Club\ or \Diamondsuit: 11+
+      \end{tabular}
+    \item The opening lead is made by the player on declarer's left. Tricks
+      are played out clockwise, cards face up. Declarer decides the play of
+      the cards from the dummy.
+    \item After each trick has been completed, cards in that trick are turned
+      face down. The winner of each trick leads the first card to the next trick.
+    \item At the end of play, the tricks won and lost are counted and agreed,
+      and the score is calculated.
+    \item For the next hand, the dealer is the next player clockwise.
+  \end{enumerate}}
+
+% ---------- layout ----------
+\newcommand{\cell}[1]{%
+  \vbox to \cellh{\vss\hbox to \cellw{\hss
+    \parbox[c][\dimexpr\cellh-2\inset\relax][t]{\dimexpr\cellw-2\inset\relax}{\bodysize #1}%
+  \hss}\vss}}
+\newcommand{\cellrow}[1]{\hbox to \paperwidth{\cell{#1}\cell{#1}}}
+
+\newcommand{\fourup}[1]{%
+  \noindent\vbox to \paperheight{\offinterlineskip\cellrow{#1}\cellrow{#1}}%
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[gray!60,dash pattern=on 3pt off 3pt,thin]
+      (current page.north) -- (current page.south);
+    \draw[gray!60,dash pattern=on 3pt off 3pt,thin]
+      (current page.west) -- (current page.east);
+  \end{tikzpicture}}
+
+% Page 1 = four copies of side A (Rules), page 2 = four copies of side B (Scoring).
+\newcommand{\minibridgerules}{%
+  \fourup{\sideA}
+  \newpage
+  \fourup{\sideB}}
