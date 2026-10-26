@@ -15,6 +15,7 @@
 \usepackage{xcolor}
 \usepackage{pifont}
 \usepackage{enumitem}
+\usepackage{multirow}
 \usepackage{url}\urlstyle{sf}
 \usepackage{tikz}
 \renewcommand{\familydefault}{\sfdefault}
@@ -53,7 +54,11 @@
 
 % ---------- SIDE B: SCORING ----------
 \newcommand{\sideB}{%
+  \raggedright
   \cardtitle{MiniBridge Scoring}
+
+  Games are played to a predetermined goal like 1000 points or 8 deals.\gap
+
   \textbf{Contracts made}\gap
 
   Points for contracts made are won by the declaring side. The declaring
@@ -64,64 +69,90 @@
   contract as follows:\gap
 
   \begin{tabular}{@{}l@{}l@{}}
-    \makebox[0.27\linewidth][l]{\Club\ or \Diamondsuit} & 20 points\\
-    \makebox[0.27\linewidth][l]{\Heart\ or \Spade} & 30 points\\
-    \makebox[0.27\linewidth][l]{No trumps} & 40 points for trick 7, 30 points thereafter
+    \makebox[0.4\linewidth][l]{Minor suit (\Club\ or \Diamondsuit)} & 20 points\\
+    \makebox[0.4\linewidth][l]{Major suit (\Heart\ or \Spade)} & 30 points\\
+    \makebox[0.4\linewidth][l]{No trumps} & 40 points (trick 7), 30 points (tricks 8+)
   \end{tabular}\gap
 
-  Bonuses are awarded for the contract declared, not for extra tricks won:\gap
+  Bonuses are awarded for the contract announced:\gap
 
-  \begin{tabular}{@{}p{0.45\linewidth}@{}>{\raggedleft\arraybackslash}p{0.20\linewidth}@{}}
-    For a part-score contract: & 50 points\\
-    (at least 7 tricks) &
-  \end{tabular}\gap
 
-  \begin{tabular}{@{}p{0.45\linewidth}@{}>{\raggedleft\arraybackslash}p{0.20\linewidth}@{}}
-    For a game contract: & 300 points\\
-    \multicolumn{2}{@{}p{0.98\linewidth}@{}}{(at least 9 tricks in no trumps, 10 tricks in \Heart\ or \Spade,
-      11 tricks in \Club\ or \Diamondsuit)}
-  \end{tabular}\gap
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    Type & Trump suit & Number of tricks & Bonus \\
+    \hline
+    Game &
+      {\renewcommand{\arraystretch}{1.0}\begin{tabular}[t]{@{}l@{}}
+        Minor (\Club{} or \Diamondsuit)\\
+        Major (\Heart{} or \Spade)\\
+        No trump
+      \end{tabular}} &
+      {\renewcommand{\arraystretch}{1.0}\begin{tabular}[t]{@{}l@{}}
+        11 \\
+        10 \\
+        9
+      \end{tabular}}
+      & 300 points \\
+    \hline
+    %Part-score & \Club{}, \Diamondsuit{}, \Heart{}, \Spade{} or NT& 7 & 50 points \\
+    %Part-score & --- & 7 & 50 points \\
+    Part-score & any & 7 & 50 points \\
+    \hline
+  \end{tabular}
+  \gap
 
   \textbf{Unsuccessful contracts}\gap
 
   If a contract is not made (i.e., the target number of tricks is not reached),
   the defending side scores points instead of the declaring side. The
-  defenders score as follows, for each trick short of the target:\gap
+  defenders score for every trick short of the target:
 
-  \begin{tabular}{@{}p{0.45\linewidth}@{}>{\raggedleft\arraybackslash}p{0.20\linewidth}@{}}
-    Per undertrick: & 50 points
+  \gap
+  \begin{tabular}{@{}l@{}l@{}}
+    \makebox[0.4\linewidth][l]{Each undertrick} & 50 points\\
   \end{tabular}
   \vfill{\fontsize{5.5}{6.5}\selectfont\noindent\expandafter\url\expandafter{\footurl}}}
 
 % ---------- SIDE A: RULES ----------
 \newcommand{\sideA}{%
   \cardtitle{MiniBridge Rules}
-  \begin{enumerate}[leftmargin=1.5em,itemsep=0.5\baselineskip,topsep=0pt,parsep=0pt]
-    \item The cards are shuffled and dealt, 13 each to the 4 players
-      (or taken from a pre-dealt board).
-    \item Points are counted and announced, starting with the dealer and
-      taking turns clockwise, using the scale:\\[0.3\baselineskip]
+  {\raggedright\begin{enumerate}[leftmargin=1.5em,itemsep=0.5\baselineskip,topsep=0pt,parsep=0pt]
+    \item The cards are shuffled and dealt, 13 each to the 4 players.
+    \item High card points (HCP) are summed and announced, clockwise, starting with the dealer:
+      \\[0.3\baselineskip]
       \hspace*{0.4em}Ace = 4\quad King = 3\quad Queen = 2\quad Jack = 1
-    \item The points for each partnership are totalled and the side with the
-      most points becomes the declaring side. The declarer is the member of the
-      declaring side with the most points, or the first to announce if equal.
-      Declarer's partner's hand is placed face up on the table as dummy.
-    \item Declarer decides and announces the contract -- the target number of
-      tricks and choice of trump suit or no trumps. Target numbers of tricks
-      may be:\\[0.3\baselineskip]
-      \hspace*{0.4em}\begin{tabular}[t]{@{}l@{\hspace{1.2em}}l@{}}
-        Part score: 7+ & Game in no trumps: 9+\\
-        Game in \Heart\ or \Spade: 10+ & Game in \Club\ or \Diamondsuit: 11+
+    \item
+      Declarer's partner's hand is placed face up on the table as dummy.\\
+      Partnership --- A team of two players sitting across from each other. \\
+      Declaring side --- The partnership with the higher combined HCP. \\
+      Declarer --- Player with the higher HCP or first to announce if equal.
+    \item Declarer decides and announces the contract --- the target number of tricks (7+) and choice of trump suit or no trumps.
+      Consider a trump contract if the declaring side has 8+ cards in a suit (a fit).
+      The following table shows the number of tricks you may expect to make:
+      \\[0.3\baselineskip]
+      \begin{tabular}{|l|llll|}
+        \hline
+        \multirow{2}{*}{Contract suit} & \multicolumn{4}{c|}{Combined HCP} \\
+        %\cline{2-5}
+        & 21+ & 23+ & 25+ & 27+ \\
+        \hline
+        Minor (\Club{} or \Diamondsuit{}) & 8 & 9 & 10 & \textbf{11} \\
+        Major (\Heart{} or \Spade{})      & 8 & 9 & \textbf{10} & -- \\
+        No Trump                          & 7 & 8 & \textbf{9}  & -- \\
+        \hline
       \end{tabular}
-    \item The opening lead is made by the player on declarer's left. Tricks
-      are played out clockwise, cards face up. Declarer decides the play of
-      the cards from the dummy.
-    \item After each trick has been completed, cards in that trick are turned
-      face down. The winner of each trick leads the first card to the next trick.
-    \item At the end of play, the tricks won and lost are counted and agreed,
-      and the score is calculated.
+    \item The opening lead is made by the player left of declarer.
+      Tricks are played out clockwise, cards face up.
+      Declarer plays their own hand and the dummy.
+      The highest card of the suit led wins the trick unless trumped.
+      You must follow suit if you can.
+    \item After each trick, the four cards are turned face down.
+      The winner leads to the next trick.
+    \item At the end of play, the tricks won are counted and scored.
     \item For the next hand, the dealer is the next player clockwise.
   \end{enumerate}}
+}
 
 % ---------- layout ----------
 \newcommand{\cell}[1]{%
@@ -143,4 +174,5 @@
 \newcommand{\minibridgerules}{%
   \fourup{\sideA}
   \newpage
-  \fourup{\sideB}}
+  \fourup{\sideB}
+}
